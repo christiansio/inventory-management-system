@@ -1,4 +1,4 @@
-package com.personal.ims.auth.entity.enums;
+package com.personal.ims.auth.enums;
 
 public enum RoleClassification {
     ADMIN,

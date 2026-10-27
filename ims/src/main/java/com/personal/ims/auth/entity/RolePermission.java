@@ -1,6 +1,6 @@
 package com.personal.ims.auth.entity;
 
-import com.personal.ims.auth.entity.enums.PermissionCode;
+import com.personal.ims.auth.enums.PermissionCode;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

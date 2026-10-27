@@ -1,6 +1,6 @@
 package com.personal.ims.auth.entity;
 
-import com.personal.ims.auth.entity.enums.RoleClassification;
+import com.personal.ims.auth.enums.RoleClassification;
 import com.personal.ims.core.entity.BaseEntity;
 
 import jakarta.persistence.Column;
