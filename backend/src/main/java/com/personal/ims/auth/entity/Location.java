@@ -1,7 +1,6 @@
 package com.personal.ims.auth.entity;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 import com.personal.ims.core.entity.BaseEntity;
 
