@@ -1,5 +1,8 @@
 package com.personal.ims.auth.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.personal.ims.auth.enums.PermissionCode;
 
 import jakarta.persistence.Column;
@@ -12,8 +15,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@NoArgsConstructor
+@Getter
+@Setter
 public class RolePermission {
 
     @Id
@@ -26,6 +35,6 @@ public class RolePermission {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PermissionCode code;
+    private List<PermissionCode> codes = new ArrayList<>();
 
 }
