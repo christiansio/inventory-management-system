@@ -1,7 +1,6 @@
 package com.personal.ims.auth.service;
 
 import java.nio.charset.StandardCharsets;
-import java.time.Instant;
 import java.util.Date;
 
 import javax.crypto.SecretKey;
@@ -64,7 +63,7 @@ public class JwtService {
         return Jwts.parser() // build a parser using JJWT's API
                 .verifyWith(key) // parser verifies token signature using key
                 .build() // creates the configured parser
-                .parseSignedClaims(token) // verify and parse a signed JWT containing claims
+                .parseSignedClaims(token) // verify, checks expiry and parse a signed JWT containing claims
                 .getPayload(); // returns the payload as a claims object
     }
 }
