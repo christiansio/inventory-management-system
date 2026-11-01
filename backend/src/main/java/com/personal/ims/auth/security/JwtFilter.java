@@ -53,7 +53,7 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        // if current token is authenticated validation passes and proceeds to next
+        // if current token is authenticated, validation passes and proceeds to next
         // processes
         if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             CustomUserDetails userDetails;
