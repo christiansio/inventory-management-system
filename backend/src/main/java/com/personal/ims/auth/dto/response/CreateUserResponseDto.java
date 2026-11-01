@@ -1,6 +1,6 @@
 package com.personal.ims.auth.dto.response;
 
-public record RegisterResponseDto(
+public record CreateUserResponseDto(
         Long id,
         String firstName) {
 
