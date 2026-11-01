@@ -46,14 +46,16 @@ public class JwtService {
         return Long.valueOf(claims.getSubject());
     }
 
+    public Long getSessionId(Claims claims) {
+        return claims.get("sid", Long.class);
+    }
+
     public boolean isTokenValid(
-            String token,
+            Claims claims,
             Long userId) {
 
-        Claims claims = extractClaims(token);
-
         return userId != null
-                && getUserId(claims)
+                && Long.valueOf(claims.getSubject())
                         .equals(userId)
                 && claims.get("sid", Long.class) != null;
     }

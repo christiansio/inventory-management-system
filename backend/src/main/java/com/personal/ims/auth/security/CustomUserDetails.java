@@ -8,9 +8,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.personal.ims.auth.entity.User;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 // Custom UserDetails is created, because default user details doesn't have getId method which we will directly fetch from the Authenticated User
+@Getter
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
 

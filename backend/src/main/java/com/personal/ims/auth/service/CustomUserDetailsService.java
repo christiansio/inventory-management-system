@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -20,15 +21,26 @@ import lombok.RequiredArgsConstructor;
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
-
     private final RolePermissionRepository rolePermissionRepository;
 
-    // Adapt the User entity to Spring Security's UserDetails principal,
-    // including the user's ID and granted authorities.
+    // Adapt the User entity to Spring Security's UserDetails principal using email
     @Override
-    public CustomUserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+
+        return buildUserDetails(user);
+
+    }
+
+    // Adapt the User entity to Spring Security's UserDetails principal using userId
+    public CustomUserDetails loadByUserId(Long userId) throws UsernameNotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found."));
+
+        return buildUserDetails(user);
+    }
+
+    private CustomUserDetails buildUserDetails(User user) {
 
         // get the permissions from the role of the current user
         // get the permission code name of each role permission and
