@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.personal.ims.auth.entity.AuthSession;
 import com.personal.ims.auth.repository.AuthSessionRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class AuthSessionService {
 
@@ -21,6 +23,7 @@ public class AuthSessionService {
         this.authSessionExp = authSessionExp;
     }
 
+    @Transactional
     public Long createAuthSession(Long userId, Instant loggedInTime) {
         AuthSession session = new AuthSession();
 
@@ -29,7 +32,8 @@ public class AuthSessionService {
         // use the logged in time + session expiry to set expiresAt field
         session.setExpiresAt(loggedInTime.plusMillis(authSessionExp));
 
-        // after setting the values save and flush so the id will be generated and be
+        // after setting the values save and flush so the id will be generated
+        // immediately and be
         // returned by the service
         AuthSession saved = repository.saveAndFlush(session);
 

@@ -9,12 +9,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.personal.ims.auth.dto.request.LoginRequestDto;
-import com.personal.ims.auth.dto.response.CreateSessionResponseDto;
 import com.personal.ims.auth.dto.response.LoginResponseDto;
 import com.personal.ims.auth.repository.RoleRepository;
 import com.personal.ims.auth.repository.UserRepository;
 import com.personal.ims.auth.security.CustomUserDetails;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -28,12 +28,13 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthSessionService authSessionService;
 
+    @Transactional
     public LoginResponseDto login(LoginRequestDto request) {
-        Instant now = Instant.now();
 
         // authenticate user using configured authentication manager
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                request.email(), request.password());
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                request.email(), request.password()));
+        Instant now = Instant.now();
 
         // get userDetails from authenticated user
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
