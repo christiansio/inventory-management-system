@@ -1,6 +1,8 @@
 package com.personal.ims.core.entity;
 
 import java.time.Instant;
+
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Column;
@@ -22,7 +24,7 @@ public class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // @CreatedDate, TO-DO, setup of JPA auditing
+    @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 }
