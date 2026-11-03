@@ -56,6 +56,7 @@ public class AuthService {
         return new LoginResponseDto(token);
     }
 
+    @Transactional
     public CreateUserResponseDto createUser(CreateUserRequestDto request) {
 
         User user = new User();
