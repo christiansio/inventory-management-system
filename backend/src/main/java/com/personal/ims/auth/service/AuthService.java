@@ -8,8 +8,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.personal.ims.auth.dto.request.CreateUserRequestDto;
 import com.personal.ims.auth.dto.request.LoginRequestDto;
+import com.personal.ims.auth.dto.response.CreateUserResponseDto;
 import com.personal.ims.auth.dto.response.LoginResponseDto;
+import com.personal.ims.auth.entity.Location;
+import com.personal.ims.auth.entity.Role;
+import com.personal.ims.auth.entity.User;
+import com.personal.ims.auth.repository.LocationRepository;
 import com.personal.ims.auth.repository.RoleRepository;
 import com.personal.ims.auth.repository.UserRepository;
 import com.personal.ims.auth.security.CustomUserDetails;
@@ -23,6 +29,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final LocationRepository locationRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
@@ -47,6 +54,23 @@ public class AuthService {
         String token = jwtService.createToken(currentUserId, sessionId);
 
         return new LoginResponseDto(token);
+    }
+
+    public CreateUserResponseDto createUser(CreateUserRequestDto request) {
+
+        User user = new User();
+        Location location = locationRepository.findById(request.locationId()).orElseThrow();
+        Role role = roleRepository.findById(request.roleId()).orElseThrow();
+        user.setEmail(request.email().trim().toLowerCase());
+
+        user.setRole(role);
+
+        user.setLocation(location);
+
+        User saved = userRepository.save(user);
+
+        return new CreateUserResponseDto(saved.getId());
+
     }
 
 }

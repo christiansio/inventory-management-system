@@ -6,14 +6,10 @@ import jakarta.validation.constraints.NotNull;
 
 public record CreateUserRequestDto(
 
-        @Email @NotBlank String email,
+                @Email @NotBlank String email,
 
-        @NotBlank String firstName,
+                @NotNull Long roleId,
 
-        @NotBlank String lastName,
-
-        @NotNull Long roleId,
-
-        @NotNull Long locationId) {
+                @NotNull Long locationId) {
 
 }
