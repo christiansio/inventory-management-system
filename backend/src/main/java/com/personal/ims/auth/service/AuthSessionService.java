@@ -41,7 +41,7 @@ public class AuthSessionService {
         return saved.getId();
     }
 
-    public boolean isSessionValid(long sessionId, long userId) {
+    public boolean isSessionValid(UUID sessionId, long userId) {
 
         // validate session by checking if it is not revoked and current time is before
         // expiry

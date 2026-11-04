@@ -47,8 +47,10 @@ public class JwtService {
         return Long.valueOf(claims.getSubject());
     }
 
-    public Long getSessionId(Claims claims) {
-        return claims.get("sid", Long.class);
+    public UUID getSessionId(Claims claims) {
+        // Json can't reliably write "UUIDs" and may be written as a "STRING"
+        // so, we parse it as a STRING and then convert to UUID
+        return UUID.fromString(claims.get("sid", String.class));
     }
 
     public boolean isTokenValid(
@@ -56,9 +58,9 @@ public class JwtService {
             Long userId) {
 
         return userId != null
-                && Long.valueOf(claims.getSubject())
+                && getUserId(claims)
                         .equals(userId)
-                && claims.get("sid", Long.class) != null;
+                && getSessionId(claims) != null;
     }
 
     public Claims extractClaims(String token) {

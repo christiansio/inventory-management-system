@@ -1,6 +1,8 @@
 package com.personal.ims.auth.dto.response;
 
+import java.util.UUID;
+
 public record CreateSessionResponseDto(
-        long sessionId) {
+                UUID sessionId) {
 
 }
