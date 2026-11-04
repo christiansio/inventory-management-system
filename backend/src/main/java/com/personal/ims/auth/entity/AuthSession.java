@@ -1,11 +1,16 @@
 package com.personal.ims.auth.entity;
 
 import java.time.Instant;
+import java.util.UUID;
 
-import com.personal.ims.core.entity.BaseEntity;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +19,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AuthSession extends BaseEntity {
+@EntityListeners(AuditingEntityListener.class)
+public class AuthSession {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(nullable = false)
     private Long userId;

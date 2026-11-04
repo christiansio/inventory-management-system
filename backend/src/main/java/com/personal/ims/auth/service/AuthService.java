@@ -1,6 +1,7 @@
 package com.personal.ims.auth.service;
 
 import java.time.Instant;
+import java.util.UUID;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -48,7 +49,7 @@ public class AuthService {
         Long currentUserId = userDetails.getUserId();
 
         // create a session for the logged in user
-        Long sessionId = authSessionService.createAuthSession(currentUserId, now);
+        UUID sessionId = authSessionService.createAuthSession(currentUserId, now);
 
         // create token using user id and session id
         String token = jwtService.createToken(currentUserId, sessionId);

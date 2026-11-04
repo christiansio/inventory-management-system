@@ -1,6 +1,7 @@
 package com.personal.ims.auth.service;
 
 import java.time.Instant;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class AuthSessionService {
     }
 
     @Transactional
-    public Long createAuthSession(Long userId, Instant loggedInTime) {
+    public UUID createAuthSession(Long userId, Instant loggedInTime) {
         AuthSession session = new AuthSession();
 
         session.setUserId(userId);

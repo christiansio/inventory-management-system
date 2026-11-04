@@ -2,6 +2,7 @@ package com.personal.ims.auth.service;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.crypto.SecretKey;
 
@@ -27,7 +28,7 @@ public class JwtService {
 
     }
 
-    public String createToken(Long userId, Long sessionId) {
+    public String createToken(Long userId, UUID sessionId) {
 
         long now = System.currentTimeMillis();
         Date issuedAt = new Date(now);
