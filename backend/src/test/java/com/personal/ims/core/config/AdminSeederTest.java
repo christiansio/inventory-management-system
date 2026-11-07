@@ -5,18 +5,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.personal.ims.auth.enums.PermissionCode;
-import com.personal.ims.auth.repository.LocationRepository;
 import com.personal.ims.auth.repository.RolePermissionRepository;
-import com.personal.ims.auth.repository.RoleRepository;
 import com.personal.ims.auth.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -29,13 +27,10 @@ class AdminSeederTest {
     private UserRepository userRepository;
 
     @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private LocationRepository locationRepository;
-
-    @Autowired
     private RolePermissionRepository rolePermissionRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Value("${ADMIN_EMAIL}")
     private String adminEmail;
@@ -66,6 +61,7 @@ class AdminSeederTest {
                 .map(permission -> permission.getCode())
                 .collect(Collectors.toSet());
 
+        assertThat(passwordEncoder.matches(adminPassword, admin.getPasswordHash())).isTrue();
         assertThat(admin.getFirstName()).isEqualTo(adminFirstName);
         assertThat(admin.getLastName()).isEqualTo(adminLastName);
         assertThat(admin.getRole().getName()).isEqualTo("ADMIN");
