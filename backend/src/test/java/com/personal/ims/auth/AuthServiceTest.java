@@ -11,9 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.personal.ims.auth.dto.request.LoginRequestDto;
+import com.personal.ims.auth.entity.Location;
+import com.personal.ims.auth.entity.Role;
+import com.personal.ims.auth.entity.User;
+import com.personal.ims.auth.enums.RoleClassification;
+import com.personal.ims.auth.repository.LocationRepository;
+import com.personal.ims.auth.repository.RoleRepository;
 import com.personal.ims.auth.repository.AuthSessionRepository;
 import com.personal.ims.auth.repository.UserRepository;
 import com.personal.ims.auth.service.AuthService;
@@ -22,8 +29,11 @@ import com.personal.ims.auth.service.JwtService;
 import jakarta.transaction.Transactional;
 
 @ActiveProfiles("test")
-@SpringBootTest(args = "--seed-admin")
+@SpringBootTest
 class AuthServiceTest {
+
+    private static final String TEST_EMAIL = "auth-service-test@example.com";
+    private static final String TEST_PASSWORD = "test-password";
 
     @Autowired
     private AuthService authService;
@@ -35,13 +45,16 @@ class AuthServiceTest {
     private UserRepository userRepository;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private LocationRepository locationRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private JwtService jwtService;
-
-    @Value("${ADMIN_EMAIL}")
-    private String adminEmail;
-
-    @Value("${ADMIN_PASSWORD}")
-    private String adminPassword;
 
     @Value("${auth.session.expiration}")
     private long authSessionExpiration;
@@ -49,10 +62,10 @@ class AuthServiceTest {
     @Test
     @Transactional
     void loginCreatesSessionAndSignedJwtForAuthenticatedUser() {
-        var user = userRepository.findByEmail(adminEmail).orElseThrow();
+        var user = createTestUser();
         Instant startedAt = Instant.now();
 
-        var response = authService.login(new LoginRequestDto(adminEmail, adminPassword));
+        var response = authService.login(new LoginRequestDto(TEST_EMAIL, TEST_PASSWORD));
         Instant finishedAt = Instant.now();
 
         var claims = jwtService.extractClaims(response.token());
@@ -78,11 +91,36 @@ class AuthServiceTest {
     @Test
     @Transactional
     void loginWithInvalidPasswordDoesNotCreateSession() {
+        createTestUser();
         long sessionsBefore = authSessionRepository.count();
 
-        assertThatThrownBy(() -> authService.login(new LoginRequestDto(adminEmail, "incorrect-password")))
+        assertThatThrownBy(() -> authService.login(new LoginRequestDto(TEST_EMAIL, "incorrect-password")))
                 .isInstanceOf(BadCredentialsException.class);
 
         assertThat(authSessionRepository.count()).isEqualTo(sessionsBefore);
+    }
+
+    private User createTestUser() {
+        Role role = new Role();
+        role.setName("AUTH_TEST");
+        role.setClassification(RoleClassification.STAFF);
+        role.setDescription("Role for AuthServiceTest");
+        role = roleRepository.save(role);
+
+        Location location = new Location();
+        location.setName("AuthServiceTest Location");
+        location.setAddress("Test address");
+        location.setIsActive(true);
+        location = locationRepository.save(location);
+
+        User user = new User();
+        user.setFirstName("Auth");
+        user.setLastName("Test");
+        user.setEmail(TEST_EMAIL);
+        user.setPasswordHash(passwordEncoder.encode(TEST_PASSWORD));
+        user.setRole(role);
+        user.setLocation(location);
+        user.setIsActive(true);
+        return userRepository.save(user);
     }
 }
