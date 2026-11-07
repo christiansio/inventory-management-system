@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.personal.ims.auth.enums.PermissionCode;
 import com.personal.ims.auth.repository.RolePermissionRepository;
@@ -19,6 +20,7 @@ import com.personal.ims.auth.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest(args = "--seed-admin")
 class AdminSeederTest {
