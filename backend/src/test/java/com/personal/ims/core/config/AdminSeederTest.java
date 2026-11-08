@@ -14,9 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.personal.ims.auth.enums.PermissionCode;
-import com.personal.ims.auth.repository.RolePermissionRepository;
-import com.personal.ims.auth.repository.UserRepository;
+import com.personal.ims.feature.auth.enums.PermissionCode;
+import com.personal.ims.feature.auth.repository.RolePermissionRepository;
+import com.personal.ims.feature.auth.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 

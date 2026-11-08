@@ -14,17 +14,17 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.personal.ims.auth.dto.request.LoginRequestDto;
-import com.personal.ims.auth.entity.Location;
-import com.personal.ims.auth.entity.Role;
-import com.personal.ims.auth.entity.User;
-import com.personal.ims.auth.enums.RoleClassification;
-import com.personal.ims.auth.repository.LocationRepository;
-import com.personal.ims.auth.repository.RoleRepository;
-import com.personal.ims.auth.repository.AuthSessionRepository;
-import com.personal.ims.auth.repository.UserRepository;
-import com.personal.ims.auth.service.AuthService;
-import com.personal.ims.auth.service.JwtService;
+import com.personal.ims.feature.auth.dto.request.LoginRequestDto;
+import com.personal.ims.feature.auth.entity.Location;
+import com.personal.ims.feature.auth.entity.Role;
+import com.personal.ims.feature.auth.entity.User;
+import com.personal.ims.feature.auth.enums.RoleClassification;
+import com.personal.ims.feature.auth.repository.AuthSessionRepository;
+import com.personal.ims.feature.auth.repository.LocationRepository;
+import com.personal.ims.feature.auth.repository.RoleRepository;
+import com.personal.ims.feature.auth.repository.UserRepository;
+import com.personal.ims.feature.auth.service.AuthService;
+import com.personal.ims.feature.auth.service.JwtService;
 
 import jakarta.transaction.Transactional;
 

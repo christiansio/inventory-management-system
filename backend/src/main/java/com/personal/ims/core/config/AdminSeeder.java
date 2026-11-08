@@ -8,16 +8,16 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.personal.ims.auth.entity.Location;
-import com.personal.ims.auth.entity.Role;
-import com.personal.ims.auth.entity.RolePermission;
-import com.personal.ims.auth.entity.User;
-import com.personal.ims.auth.enums.PermissionCode;
-import com.personal.ims.auth.enums.RoleClassification;
-import com.personal.ims.auth.repository.LocationRepository;
-import com.personal.ims.auth.repository.RolePermissionRepository;
-import com.personal.ims.auth.repository.RoleRepository;
-import com.personal.ims.auth.repository.UserRepository;
+import com.personal.ims.feature.auth.entity.Location;
+import com.personal.ims.feature.auth.entity.Role;
+import com.personal.ims.feature.auth.entity.RolePermission;
+import com.personal.ims.feature.auth.entity.User;
+import com.personal.ims.feature.auth.enums.PermissionCode;
+import com.personal.ims.feature.auth.enums.RoleClassification;
+import com.personal.ims.feature.auth.repository.LocationRepository;
+import com.personal.ims.feature.auth.repository.RolePermissionRepository;
+import com.personal.ims.feature.auth.repository.RoleRepository;
+import com.personal.ims.feature.auth.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
