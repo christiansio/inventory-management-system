@@ -1,4 +1,4 @@
-package com.personal.ims.core.exception;
+package com.personal.ims.shared.exception;
 
 import lombok.Getter;
 

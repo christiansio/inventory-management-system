@@ -1,4 +1,4 @@
-package com.personal.ims.core.config;
+package com.personal.ims.shared.config;
 
 import java.time.Instant;
 import java.time.temporal.TemporalAccessor;

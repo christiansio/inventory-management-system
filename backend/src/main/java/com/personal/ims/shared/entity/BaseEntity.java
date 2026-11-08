@@ -1,4 +1,4 @@
-package com.personal.ims.core.entity;
+package com.personal.ims.shared.entity;
 
 import java.time.Instant;
 
