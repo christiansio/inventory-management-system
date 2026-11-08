@@ -2,7 +2,7 @@ package com.personal.ims.feature.auth.entity;
 
 import java.time.Instant;
 
-import com.personal.ims.core.entity.BaseEntity;
+import com.personal.ims.shared.entity.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

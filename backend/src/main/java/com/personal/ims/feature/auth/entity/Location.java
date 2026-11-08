@@ -5,7 +5,7 @@ import java.time.Instant;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.personal.ims.core.entity.BaseEntity;
+import com.personal.ims.shared.entity.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
