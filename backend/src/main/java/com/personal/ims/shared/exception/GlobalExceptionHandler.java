@@ -1,12 +1,18 @@
 package com.personal.ims.shared.exception;
 
-import org.springframework.boot.context.properties.bind.validation.ValidationErrors;
+import java.util.List;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.personal.ims.shared.dto.ValidationErrorDto;
@@ -46,10 +52,41 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                 .body(detail);
         }
 
+        @Override
+        protected ResponseEntity<Object> handleMethodArgumentNotValid(
+                        MethodArgumentNotValidException ex,
+                        HttpHeaders headers,
+                        HttpStatusCode status,
+                        WebRequest request) {
+
+                // Get all the validation errors from the exception and use the helper method to
+                // form detail extension format
+                List<ValidationErrorDto> errors = ex.getBindingResult()
+                                .getAllErrors()
+                                .stream()
+                                .map(this::toValidationErrorDto)
+                                .toList();
+
+                // Create a problem detail object that uses ProblemCode validation error enum w/
+                // properties
+                ProblemDetail problemDetail = problemDetailFactory.createProblemDetail(
+                                ProblemCode.VALIDATION_ERROR, null);
+
+                // add extension error extension to the detail
+                problemDetail.setProperty("error", errors);
+
+                return handleExceptionInternal(
+                                ex,
+                                problemDetail,
+                                headers,
+                                HttpStatus.BAD_REQUEST,
+                                request);
+        }
+
         private ValidationErrorDto toValidationErrorDto(ObjectError error) {
 
                 // get code from the ObjectError
-                String springCode = error.getCode();
+                String errorCode = error.getCode();
 
                 // if error is a field error, then get the specific field where the validation
                 // error happened
@@ -58,7 +95,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                 : null;
 
                 // if code starts with NotNull or NotBlank, return appropriate
-                if (springCode != null && (springCode.startsWith("NotNull")) && (springCode.startsWith("NotBlank"))) {
+                if (errorCode != null && (errorCode.startsWith("NotNull")) && (errorCode.startsWith("NotBlank"))) {
                         return new ValidationErrorDto(field, "required", "This field is required.");
 
                 }
