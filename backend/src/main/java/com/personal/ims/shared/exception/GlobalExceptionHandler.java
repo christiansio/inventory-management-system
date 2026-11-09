@@ -28,28 +28,41 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         private final ProblemDetailFactory problemDetailFactory;
 
         @ExceptionHandler(AppException.class)
-        public ResponseEntity<Object> handleAppException(AppException e) {
+        public ResponseEntity<Object> handleAppException(AppException e, WebRequest request) {
 
-                ProblemDetail detail = problemDetailFactory
+                // Use problemDetailFactory to set problemDetail fields using exception code
+                // and message
+                ProblemDetail problem = problemDetailFactory
                                 .createProblemDetail(e.getProblemCode(), e.getMessage());
 
-                return ResponseEntity
-                                .status(detail.getStatus())
-                                .body(detail);
+                // output using Spring's "common response-building step" for consistent and
+                // complete response
+                return handleExceptionInternal(
+                                e,
+                                problem,
+                                HttpHeaders.EMPTY,
+                                e.getProblemCode().getStatus(),
+                                request);
 
         }
 
         @ExceptionHandler(Exception.class)
-        public ResponseEntity<Object> handleUnexpectedException(Exception e) {
+        public ResponseEntity<Object> handleUnexpectedException(Exception e, WebRequest request) {
 
-                ProblemDetail detail = problemDetailFactory
+                // use factory to set the details of the problem
+                ProblemDetail problem = problemDetailFactory
                                 .createProblemDetail(ProblemCode.INTERNAL_ERROR, null);
 
-                log.error("Unhandled exception, occurenceId={}", detail.getInstance(), e);
+                // log unexpected exceptions to server logs
+                log.error("Unhandled exception, occurrenceId={}", problem.getInstance(), e);
 
-                return ResponseEntity
-                                .status(detail.getStatus())
-                                .body(detail);
+                return handleExceptionInternal(
+                                e,
+                                problem,
+                                HttpHeaders.EMPTY,
+                                HttpStatus.INTERNAL_SERVER_ERROR,
+                                request);
+
         }
 
         @Override
@@ -72,8 +85,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 ProblemDetail problemDetail = problemDetailFactory.createProblemDetail(
                                 ProblemCode.VALIDATION_ERROR, null);
 
-                // add extension error extension to the detail
-                problemDetail.setProperty("error", errors);
+                // add extension errors extension to the detail
+                problemDetail.setProperty("errors", errors);
 
                 return handleExceptionInternal(
                                 ex,
@@ -83,6 +96,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                 request);
         }
 
+        // private helper that formats field or object errors into appropriate format to
+        // be inserted as extension in the error response
         private ValidationErrorDto toValidationErrorDto(ObjectError error) {
 
                 // get code from the ObjectError
@@ -95,7 +110,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                 : null;
 
                 // if code starts with NotNull or NotBlank, return appropriate
-                if (errorCode != null && (errorCode.startsWith("NotNull")) && (errorCode.startsWith("NotBlank"))) {
+                if (errorCode != null && (errorCode.startsWith("NotNull")) || (errorCode.startsWith("NotBlank"))) {
                         return new ValidationErrorDto(field, "required", "This field is required.");
 
                 }
