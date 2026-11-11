@@ -33,7 +33,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 // Use problemDetailFactory to set problemDetail fields using exception code
                 // and message
                 ProblemDetail problem = problemDetailFactory
-                                .createProblemDetail(e.getProblemCode(), e.getMessage());
+                                .buildProblemDetail(e.getProblemCode(), e.getMessage());
 
                 // output using Spring's "common response-building step" for consistent and
                 // complete response
@@ -51,7 +51,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
                 // use factory to set the details of the problem
                 ProblemDetail problem = problemDetailFactory
-                                .createProblemDetail(ProblemCode.INTERNAL_ERROR, null);
+                                .buildProblemDetail(ProblemCode.INTERNAL_ERROR, null);
 
                 // log unexpected exceptions to server logs
                 log.error("Unhandled exception, occurrenceId={}", problem.getInstance(), e);
@@ -82,7 +82,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
                 // Create a problem detail object that uses ProblemCode validation error enum w/
                 // properties
-                ProblemDetail problemDetail = problemDetailFactory.createProblemDetail(
+                ProblemDetail problemDetail = problemDetailFactory.buildProblemDetail(
                                 ProblemCode.VALIDATION_ERROR, null);
 
                 // add extension errors extension to the detail

@@ -17,7 +17,7 @@ public class ProblemDetailFactory {
     private String problemsBaseUrl;
 
     // Builds an RFC 9457 ProblemDetail from the problem code and optional detail
-    public ProblemDetail createProblemDetail(ProblemCode problemCode, String detail) {
+    public ProblemDetail buildProblemDetail(ProblemCode problemCode, String detail) {
 
         // Set problem detail status
         ProblemDetail problemDetail = ProblemDetail.forStatus(problemCode.getStatus());
